@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import org.esialb.edison.sfo.OledImage;
 import org.esialb.edison.sfo.SFOled;
+import org.esialb.edison.sfo.TextImages;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
@@ -14,14 +16,25 @@ public class Main {
 		oledsGraphics.fillRect(0, 0, oleds.getWidth(), oleds.getHeight());
 		oleds.paint();
 		
+		OledImage sf = SFOled.createImage();
+		Graphics2D sfGraphics = sf.createGraphics();
+		sfGraphics.setFont(TextImages.FONT);
+		
 		Color penColor = Color.WHITE;
 		BufferedImage canvas = new BufferedImage(oleds.getWidth(), oleds.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics2D canvasGraphics = canvas.createGraphics();
 		boolean penDown = false;
 		
+		sfGraphics.setColor(Color.BLACK);
+		sfGraphics.fillRect(0, 0, 64, 48);
+		sfGraphics.setColor(Color.WHITE);
+		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
+		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+		
 		int x = 0;
 		int y = 0;
 		
+		sf.paint();
 		for(;;) {
 			oledsGraphics.drawImage(canvas, 0, 0, null);
 			oledsGraphics.setColor(Color.BLACK);
@@ -42,10 +55,28 @@ public class Main {
 					x--;
 				if(SFOled.isRightPressed() && x < 255)
 					x++;
-				if(SFOled.isAPressed())
+				if(SFOled.isAPressed()) {
 					penDown = !penDown;
-				if(SFOled.isBPressed())
+					while(SFOled.isAPressed())
+						Thread.sleep(50);
+					sfGraphics.setColor(Color.BLACK);
+					sfGraphics.fillRect(0, 0, 64, 48);
+					sfGraphics.setColor(Color.WHITE);
+					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
+					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+					sf.paint();
+				}
+				if(SFOled.isBPressed()) {
 					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
+					while(SFOled.isBPressed())
+						Thread.sleep(50);
+					sfGraphics.setColor(Color.BLACK);
+					sfGraphics.fillRect(0, 0, 64, 48);
+					sfGraphics.setColor(Color.WHITE);
+					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
+					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+					sf.paint();
+				}
 				if(oy != y || ox != x || opd != penDown || opc != penColor)
 					break;
 				Thread.sleep(50);
