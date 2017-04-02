@@ -7,6 +7,7 @@ import org.esialb.edison.sfo.Multiplexer;
 import org.esialb.edison.sfo.OledImage;
 
 import mraa.I2c;
+import mraa.I2cMode;
 
 public class CompoundImage extends BufferedImage {
 	private static final CompoundImage instance = new CompoundImage();
@@ -24,6 +25,7 @@ public class CompoundImage extends BufferedImage {
 		super(256, 128, BufferedImage.TYPE_INT_RGB);
 		
 		I2c i2c = new I2c(1);
+		i2c.frequency(I2cMode.I2C_FAST);
 		Multiplexer mx = new Multiplexer(i2c, (short) 0x70);
 		
 		I2COled oled;
