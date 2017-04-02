@@ -59,8 +59,11 @@ public class Main {
 					x+=move;
 				if(SFOled.isAPressed()) {
 					penDown = !penDown;
-					while(SFOled.isAPressed())
+					while(SFOled.isAPressed()) {
+						if(SFOled.isBPressed())
+							System.exit(0);
 						Thread.sleep(50);
+					}
 					sfGraphics.setColor(Color.BLACK);
 					sfGraphics.fillRect(0, 0, 64, 48);
 					sfGraphics.setColor(Color.WHITE);
@@ -70,8 +73,11 @@ public class Main {
 				}
 				if(SFOled.isBPressed()) {
 					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
-					while(SFOled.isBPressed())
+					while(SFOled.isBPressed()) {
+						if(SFOled.isAPressed())
+							System.exit(0);
 						Thread.sleep(50);
+					}
 					sfGraphics.setColor(Color.BLACK);
 					sfGraphics.fillRect(0, 0, 64, 48);
 					sfGraphics.setColor(Color.WHITE);
