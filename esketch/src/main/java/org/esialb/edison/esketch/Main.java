@@ -31,8 +31,8 @@ public class Main {
 		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
 		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
 		
-		int x = 0;
-		int y = 0;
+		int x = 64;
+		int y = 32;
 		
 		int move = 1;
 		
