@@ -32,6 +32,8 @@ public class Main {
 			
 			while(true) {
 				int oy = y, ox = x;
+				boolean opd = penDown;
+				Color opc = penColor;
 				if(SFOled.isUpPressed() && y > 0)
 					y--;
 				if(SFOled.isDownPressed() && y < 127)
@@ -40,9 +42,18 @@ public class Main {
 					x--;
 				if(SFOled.isRightPressed() && x < 255)
 					x++;
-				if(oy != y || ox != x)
+				if(SFOled.isAPressed())
+					penDown = !penDown;
+				if(SFOled.isBPressed())
+					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
+				if(oy != y || ox != x || opd != penDown || opc != penColor)
 					break;
 				Thread.sleep(50);
+			}
+			
+			if(penDown) {
+				canvasGraphics.setColor(penColor);
+				canvasGraphics.fillOval(x-1, y-1, 3, 3);
 			}
 		}
 	}

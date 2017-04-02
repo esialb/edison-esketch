@@ -31,18 +31,22 @@ public class CompoundImage extends BufferedImage {
 		oled = new I2COled(i2c, mx.selector(1));
 		oled.begin();
 		ul = oled.createImage();
+		ul.paint();
 		
 		oled = new I2COled(i2c, mx.selector(0));
 		oled.begin();
 		ur = oled.createImage();
+		ur.paint();
 		
 		oled = new I2COled(i2c, mx.selector(3));
 		oled.begin();
 		ll = oled.createImage();
+		ll.paint();
 		
 		oled = new I2COled(i2c, mx.selector(4));
 		oled.begin();
 		lr = oled.createImage();
+		lr.paint();
 	}
 
 	public void paint() {
