@@ -34,11 +34,7 @@ public class Main {
 		canvasGraphics = canvas.createGraphics();
 		penDown = false;
 		
-		sfGraphics.setColor(Color.BLACK);
-		sfGraphics.fillRect(0, 0, 64, 48);
-		sfGraphics.setColor(Color.WHITE);
-		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
-		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
+		paintSf();
 		
 		int x = 64;
 		int y = 32;
@@ -67,42 +63,32 @@ public class Main {
 				if(SFOled.isRightPressed() && x < 256 - move)
 					x+=move;
 				if(SFOled.isAPressed()) {
-					penDown = !penDown;
 					while(SFOled.isAPressed()) {
 						if(SFOled.isBPressed()) {
 							while(SFOled.isAPressed() || SFOled.isBPressed())
 								Thread.sleep(50);
-							canvasGraphics.setColor(Color.WHITE);
+							canvasGraphics.setColor(penColor);
 							canvasGraphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 							break input;
 						}
 						Thread.sleep(50);
 					}
-					sfGraphics.setColor(Color.BLACK);
-					sfGraphics.fillRect(0, 0, 64, 48);
-					sfGraphics.setColor(Color.WHITE);
-					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
-					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
-					sf.paint();
+					penDown = !penDown;
+					paintSf();
 				}
 				if(SFOled.isBPressed()) {
-					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
 					while(SFOled.isBPressed()) {
 						if(SFOled.isAPressed()) {
 							while(SFOled.isAPressed() || SFOled.isBPressed())
 								Thread.sleep(50);
-							canvasGraphics.setColor(Color.BLACK);
+							canvasGraphics.setColor(penColor);
 							canvasGraphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 							break input;
 						}
 						Thread.sleep(50);
 					}
-					sfGraphics.setColor(Color.BLACK);
-					sfGraphics.fillRect(0, 0, 64, 48);
-					sfGraphics.setColor(Color.WHITE);
-					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
-					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
-					sf.paint();
+					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
+					paintSf();
 				}
 				if(oy != y || ox != x || opd != penDown || opc != penColor) {
 					if(!penDown && move < 10)
@@ -120,5 +106,14 @@ public class Main {
 				canvasGraphics.fillOval(x-1, y-1, 3, 3);
 			}
 		}
+	}
+	
+	private static void paintSf() {
+		sfGraphics.setColor(Color.BLACK);
+		sfGraphics.fillRect(0, 0, 64, 48);
+		sfGraphics.setColor(Color.WHITE);
+		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 47);
+		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 7);
+		sf.paint();
 	}
 }
