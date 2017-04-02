@@ -17,6 +17,7 @@ public class Main {
 	private static BufferedImage canvas;
 	private static Graphics2D canvasGraphics;
 	private static boolean penDown;
+	private static boolean showPen;
 	
 	public static void main(String[] args) throws Exception {
 		oleds = CompoundImage.get();
@@ -33,6 +34,7 @@ public class Main {
 		canvas = new BufferedImage(oleds.getWidth(), oleds.getHeight(), BufferedImage.TYPE_INT_RGB);
 		canvasGraphics = canvas.createGraphics();
 		penDown = false;
+		showPen = true;
 		
 		paintSf();
 		
@@ -44,15 +46,17 @@ public class Main {
 		sf.paint();
 		for(;;) {
 			oledsGraphics.drawImage(canvas, 0, 0, null);
-			oledsGraphics.setColor(Color.BLACK);
-			oledsGraphics.fillOval(x-1, y-1, 3, 3);
-			oledsGraphics.setColor(Color.WHITE);
-			oledsGraphics.drawOval(x-2, y-2, 5, 5);
+			if(showPen) {
+				oledsGraphics.setColor(Color.BLACK);
+				oledsGraphics.fillOval(x-1, y-1, 3, 3);
+				oledsGraphics.setColor(Color.WHITE);
+				oledsGraphics.drawOval(x-2, y-2, 5, 5);
+			}
 			oleds.paint();
 			
 			input: while(true) {
 				int oy = y, ox = x;
-				boolean opd = penDown;
+				boolean opd = penDown, osp = showPen;
 				Color opc = penColor;
 				if(SFOled.isUpPressed() && y > move - 1)
 					y-=move;
@@ -90,10 +94,15 @@ public class Main {
 					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
 					paintSf();
 				}
-				if(oy != y || ox != x || opd != penDown || opc != penColor) {
-					if(!penDown && move < 10)
+				if(SFOled.isSelectPressed()) {
+					while(SFOled.isSelectPressed())
+						Thread.sleep(50);
+					showPen = !showPen;
+				}
+				if(oy != y || ox != x || opd != penDown || opc != penColor || osp != showPen) {
+					if(!penDown && move < 10 && (oy != y || ox != x))
 						move++;
-					if(penDown)
+					else
 						move = 1;
 					break;
 				}
