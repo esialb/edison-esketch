@@ -9,21 +9,30 @@ import org.esialb.edison.sfo.SFOled;
 import org.esialb.edison.sfo.TextImages;
 
 public class Main {
+	private static CompoundImage oleds;
+	private static Graphics2D oledsGraphics;
+	private static OledImage sf;
+	private static Graphics2D sfGraphics;
+	private static Color penColor;
+	private static BufferedImage canvas;
+	private static Graphics2D canvasGraphics;
+	private static boolean penDown;
+	
 	public static void main(String[] args) throws Exception {
-		CompoundImage oleds = CompoundImage.get();
-		Graphics2D oledsGraphics = oleds.createGraphics();
+		oleds = CompoundImage.get();
+		oledsGraphics = oleds.createGraphics();
 		oledsGraphics.setColor(Color.BLACK);
 		oledsGraphics.fillRect(0, 0, oleds.getWidth(), oleds.getHeight());
 		oleds.paint();
 		
-		OledImage sf = SFOled.createImage();
-		Graphics2D sfGraphics = sf.createGraphics();
+		sf = SFOled.createImage();
+		sfGraphics = sf.createGraphics();
 		sfGraphics.setFont(TextImages.FONT);
 		
-		Color penColor = Color.WHITE;
-		BufferedImage canvas = new BufferedImage(oleds.getWidth(), oleds.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics2D canvasGraphics = canvas.createGraphics();
-		boolean penDown = false;
+		penColor = Color.WHITE;
+		canvas = new BufferedImage(oleds.getWidth(), oleds.getHeight(), BufferedImage.TYPE_INT_RGB);
+		canvasGraphics = canvas.createGraphics();
+		penDown = false;
 		
 		sfGraphics.setColor(Color.BLACK);
 		sfGraphics.fillRect(0, 0, 64, 48);
@@ -45,7 +54,7 @@ public class Main {
 			oledsGraphics.drawOval(x-2, y-2, 5, 5);
 			oleds.paint();
 			
-			while(true) {
+			input: while(true) {
 				int oy = y, ox = x;
 				boolean opd = penDown;
 				Color opc = penColor;
@@ -60,8 +69,13 @@ public class Main {
 				if(SFOled.isAPressed()) {
 					penDown = !penDown;
 					while(SFOled.isAPressed()) {
-						if(SFOled.isBPressed())
-							System.exit(0);
+						if(SFOled.isBPressed()) {
+							while(SFOled.isAPressed() || SFOled.isBPressed())
+								Thread.sleep(50);
+							canvasGraphics.setColor(Color.WHITE);
+							canvasGraphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+							break input;
+						}
 						Thread.sleep(50);
 					}
 					sfGraphics.setColor(Color.BLACK);
@@ -74,8 +88,13 @@ public class Main {
 				if(SFOled.isBPressed()) {
 					penColor = (penColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
 					while(SFOled.isBPressed()) {
-						if(SFOled.isAPressed())
-							System.exit(0);
+						if(SFOled.isAPressed()) {
+							while(SFOled.isAPressed() || SFOled.isBPressed())
+								Thread.sleep(50);
+							canvasGraphics.setColor(Color.BLACK);
+							canvasGraphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+							break input;
+						}
 						Thread.sleep(50);
 					}
 					sfGraphics.setColor(Color.BLACK);
