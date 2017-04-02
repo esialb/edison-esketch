@@ -8,9 +8,9 @@ import org.esialb.edison.sfo.OledImage;
 
 import mraa.I2c;
 
-public class CanvasImage extends BufferedImage {
-	private static final CanvasImage instance = new CanvasImage();
-	public static CanvasImage get() {
+public class CompoundImage extends BufferedImage {
+	private static final CompoundImage instance = new CompoundImage();
+	public static CompoundImage get() {
 		return instance;
 	}
 	
@@ -20,7 +20,7 @@ public class CanvasImage extends BufferedImage {
 	protected OledImage ll;
 	protected OledImage lr;
 	
-	private CanvasImage() {
+	private CompoundImage() {
 		super(256, 128, BufferedImage.TYPE_INT_RGB);
 		
 		I2c i2c = new I2c(1);
