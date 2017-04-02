@@ -34,6 +34,8 @@ public class Main {
 		int x = 0;
 		int y = 0;
 		
+		int move = 1;
+		
 		sf.paint();
 		for(;;) {
 			oledsGraphics.drawImage(canvas, 0, 0, null);
@@ -47,14 +49,14 @@ public class Main {
 				int oy = y, ox = x;
 				boolean opd = penDown;
 				Color opc = penColor;
-				if(SFOled.isUpPressed() && y > 0)
-					y--;
-				if(SFOled.isDownPressed() && y < 127)
-					y++;
-				if(SFOled.isLeftPressed() && x > 0)
-					x--;
-				if(SFOled.isRightPressed() && x < 255)
-					x++;
+				if(SFOled.isUpPressed() && y > move - 1)
+					y-=move;
+				if(SFOled.isDownPressed() && y < 128 - move)
+					y+=move;
+				if(SFOled.isLeftPressed() && x > move - 1)
+					x-=move;
+				if(SFOled.isRightPressed() && x < 256 - move)
+					x+=move;
 				if(SFOled.isAPressed()) {
 					penDown = !penDown;
 					while(SFOled.isAPressed())
@@ -77,8 +79,14 @@ public class Main {
 					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
 					sf.paint();
 				}
-				if(oy != y || ox != x || opd != penDown || opc != penColor)
+				if(oy != y || ox != x || opd != penDown || opc != penColor) {
+					if(!penDown && move < 10)
+						move++;
+					if(penDown)
+						move = 1;
 					break;
+				}
+				move = 1;
 				Thread.sleep(50);
 			}
 			
