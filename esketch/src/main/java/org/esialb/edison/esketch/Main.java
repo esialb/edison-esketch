@@ -28,6 +28,7 @@ public class Main {
 			oledsGraphics.fillOval(x-1, y-1, 3, 3);
 			oledsGraphics.setColor(Color.WHITE);
 			oledsGraphics.drawOval(x-2, y-2, 5, 5);
+			oleds.paint();
 			
 			while(true) {
 				int oy = y, ox = x;
