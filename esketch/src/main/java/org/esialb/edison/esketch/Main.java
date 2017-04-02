@@ -28,8 +28,8 @@ public class Main {
 		sfGraphics.setColor(Color.BLACK);
 		sfGraphics.fillRect(0, 0, 64, 48);
 		sfGraphics.setColor(Color.WHITE);
-		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
-		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
+		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
 		
 		int x = 0;
 		int y = 0;
@@ -62,8 +62,8 @@ public class Main {
 					sfGraphics.setColor(Color.BLACK);
 					sfGraphics.fillRect(0, 0, 64, 48);
 					sfGraphics.setColor(Color.WHITE);
-					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
-					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
+					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
 					sf.paint();
 				}
 				if(SFOled.isBPressed()) {
@@ -73,8 +73,8 @@ public class Main {
 					sfGraphics.setColor(Color.BLACK);
 					sfGraphics.fillRect(0, 0, 64, 48);
 					sfGraphics.setColor(Color.WHITE);
-					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 0);
-					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 8);
+					sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 8);
+					sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 16);
 					sf.paint();
 				}
 				if(oy != y || ox != x || opd != penDown || opc != penColor)
