@@ -117,9 +117,9 @@ public class Main {
 					showPen = !showPen;
 				}
 				if(oy != y || ox != x || opd != penDown || opc != penColor || osp != showPen) {
-					if(!penDown && move < 10 && (oy != y || ox != x))
-						move++;
-					else
+					if(!penDown && (oy != y || ox != x)) {
+						move = Math.min(10, move + 1);
+					} else
 						move = 1;
 					break;
 				}
