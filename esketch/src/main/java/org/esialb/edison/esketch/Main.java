@@ -19,6 +19,7 @@ public class Main {
 	private static OledImage sf;
 	private static OledImage sf2;
 	private static Graphics2D sfGraphics;
+	private static Graphics2D sf2Graphics;
 	private static Color penColor;
 	private static BufferedImage canvas;
 	private static Graphics2D canvasGraphics;
@@ -29,9 +30,6 @@ public class Main {
 		I2c i2c = new I2c(1);
 		i2c.frequency(I2cMode.I2C_FAST);
 
-		I2cOled sf2Oled = new I2cOled(i2c, new Multiplexer(i2c, (short) 0x70).selector(2));
-		sf2Oled.begin();
-		sf2 = sf2Oled.createImage();
 		
 		oleds = new CompoundImage(i2c);
 		oledsGraphics = oleds.createGraphics();
@@ -43,6 +41,12 @@ public class Main {
 		sfGraphics = sf.createGraphics();
 		sfGraphics.setFont(TextImages.FONT);
 		
+		I2cOled sf2Oled = new I2cOled(i2c, new Multiplexer(i2c, (short) 0x70).selector(2));
+		sf2Oled.begin();
+		sf2 = sf2Oled.createImage();
+		sf2Graphics = sf2.createGraphics();
+		sf2Graphics.setFont(TextImages.FONT.deriveFont(14f));
+
 		penColor = Color.WHITE;
 		canvas = new BufferedImage(oleds.getWidth(), oleds.getHeight(), BufferedImage.TYPE_INT_RGB);
 		canvasGraphics = canvas.createGraphics();
@@ -132,10 +136,17 @@ public class Main {
 	
 	private static void paintSf() {
 		sfGraphics.setColor(Color.BLACK);
-		sfGraphics.fillRect(0, 0, 64, 48);
+		sfGraphics.fillRect(0, 0, sf.getWidth(), sf.getHeight());
 		sfGraphics.setColor(Color.WHITE);
-		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, 47);
-		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, 7);
+		sfGraphics.drawString(penColor == Color.WHITE ? "WHITE" : "BLACK", 0, sf.getHeight() - sfGraphics.getFontMetrics().getDescent() - 1);
+		sfGraphics.drawString(penDown ? "DOWN" : "UP", 0, sfGraphics.getFontMetrics().getAscent());
 		sf.paint();
+		
+		sf2Graphics.setColor(Color.BLACK);
+		sf2Graphics.fillRect(0, 0, sf2.getWidth(), sf2.getHeight());
+		sf2Graphics.setColor(Color.WHITE);
+		sf2Graphics.drawString(penColor == Color.WHITE ? "Color: WHITE" : "Color: BLACK", 0, sf2.getHeight() - sf2Graphics.getFontMetrics().getDescent() - 1);
+		sf2Graphics.drawString(penDown ? "Pen: DOWN" : "Pen: UP", 0, sf2Graphics.getFontMetrics().getAscent());
+		sf2.paint();
 	}
 }
