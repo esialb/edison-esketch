@@ -4,14 +4,20 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import org.esialb.edison.sfo.I2cOled;
+import org.esialb.edison.sfo.Multiplexer;
 import org.esialb.edison.sfo.OledImage;
 import org.esialb.edison.sfo.SFOled;
 import org.esialb.edison.sfo.TextImages;
+
+import mraa.I2c;
+import mraa.I2cMode;
 
 public class Main {
 	private static CompoundImage oleds;
 	private static Graphics2D oledsGraphics;
 	private static OledImage sf;
+	private static OledImage sf2;
 	private static Graphics2D sfGraphics;
 	private static Color penColor;
 	private static BufferedImage canvas;
@@ -20,7 +26,14 @@ public class Main {
 	private static boolean showPen;
 	
 	public static void main(String[] args) throws Exception {
-		oleds = CompoundImage.get();
+		I2c i2c = new I2c(1);
+		i2c.frequency(I2cMode.I2C_FAST);
+
+		I2cOled sf2Oled = new I2cOled(i2c, new Multiplexer(i2c, (short) 0x70).selector(2));
+		sf2Oled.begin();
+		sf2 = sf2Oled.createImage();
+		
+		oleds = new CompoundImage(i2c);
 		oledsGraphics = oleds.createGraphics();
 		oledsGraphics.setColor(Color.BLACK);
 		oledsGraphics.fillRect(0, 0, oleds.getWidth(), oleds.getHeight());
