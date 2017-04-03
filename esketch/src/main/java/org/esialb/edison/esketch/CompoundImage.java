@@ -25,7 +25,7 @@ public class CompoundImage extends BufferedImage {
 		super(256, 128, BufferedImage.TYPE_INT_RGB);
 		
 		I2c i2c = new I2c(1);
-		i2c.frequency(I2cMode.I2C_FAST);
+		i2c.frequency(I2cMode.I2C_HIGH);
 		Multiplexer mx = new Multiplexer(i2c, (short) 0x70);
 		
 		I2COled oled;
